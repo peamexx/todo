@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        *{margin: 0; padding: 0; border: 0; list-style: none; font-family: 'Montserrat', sans-serif;}
+        html, body {width: 100%; height: 100%;}
+        .wrap {width: 100%; height: 100%; background-color: #fff1e6;}
+        .todo {width: 800px; position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+        input {width: 600px; padding: 20px; background-color: #eddcd2; font-size: 16px;}
+        button {margin-left: 10px; padding: 20px; color: #fff; cursor: pointer;}
+        .add {margin-left: 10px; background-color: #ddbea9; font-weight: bold;}
+        .done {background-color: #cb997e; font-weight: bold;}
+        .remove {background-color: #b7b7a4;}
+        p {display: inline-block; width: 450px; max-width: 600px; padding: 20px; background-color: #f0efeb; font-weight: bold;}
+        .bottom {padding-top: 50px;}
+        li {margin-bottom: 10px;}
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="todo">
+            <div class="top">
+                <input type="text">
+                <button class="add">ADD</button>
+            </div>
+            <div class="bottom">
+                <ul>
+                    <li>
+                        <p>테스트로 입력 this is test text!</p>
+                        <button class="done">DONE</button>
+                        <button class="remove">REMOVE</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var ul = document.getElementsByTagName('ul')[0];
+        var inputV = document.getElementsByTagName('input')[0].value;
+        var addBtn = document.getElementsByClassName('add')[0];
+
+        addBtn.addEventListener('click', function(event) {
+            var newLi = document.createElement('li');
+            var newP = document.createElement('p');
+            newP.innerText = inputV; //이거왜안되냐이거야
+            var newDoneBtn = document.createElement('button');
+            newDoneBtn.className = 'done';
+            newDoneBtn.innerHTML = 'DONE'
+            var newRemoveBtn = document.createElement('button');
+            newRemoveBtn.className = 'remove';
+            newRemoveBtn.innerHTML = 'REMOVE';
+            // classlit과 이거 차이점
+            newLi.appendChild(newP);
+            newLi.appendChild(newDoneBtn);
+            newLi.appendChild(newRemoveBtn);
+            ul.append(newLi);
+
+            //제거누르면사라지는거 완료누르면밑줄쳐지는거
+            //50분걸림
+        });
+    </script>
+</body>
+</html>
