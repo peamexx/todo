@@ -45,11 +45,13 @@
         var ul = document.getElementsByTagName('ul')[0];
         var inputV = document.getElementsByTagName('input')[0].value;
         var addBtn = document.getElementsByClassName('add')[0];
+        var doneBtn = document.getElementsByClassName('done');
 
         addBtn.addEventListener('click', function(event) {
             var newLi = document.createElement('li');
             var newP = document.createElement('p');
-            newP.innerText = inputV; //이거왜안되냐이거야
+            var inputV = document.getElementsByTagName('input')[0].value; //이걸또안쪾에넣으니까되네뭐지???
+            newP.textContent = inputV;
             var newDoneBtn = document.createElement('button');
             newDoneBtn.className = 'done';
             newDoneBtn.innerHTML = 'DONE'
@@ -64,7 +66,18 @@
 
             //제거누르면사라지는거 완료누르면밑줄쳐지는거
             //50분걸림
+
+            // 10:05~10:30 또 var안쪽에 넣으면 되니까 전역로컬 더 공부 30분걸림
         });
+
+        for(i=0; i<doneBtn.length; i++) {
+            doneBtn[i].addEventListener('click', function(event) {
+                // var doneBtn = document.getElementsByClassName('done');
+                // doneBtn[i].parentNode.remove();
+                 alert(i);
+                 // 아니 이거 어케하지
+            });
+        };
     </script>
 </body>
 </html>
