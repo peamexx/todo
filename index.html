@@ -14,7 +14,7 @@
         input {width: 600px; padding: 20px; background-color: #eddcd2; font-size: 16px;}
         button {margin-left: 10px; padding: 20px; color: #fff; cursor: pointer;}
         .add {margin-left: 10px; background-color: #ddbea9; font-weight: bold;}
-        .done {background-color: #cb997e; font-weight: bold;}
+        .complete {background-color: #cb997e; font-weight: bold;}
         .remove {background-color: #b7b7a4;}
         p {display: inline-block; width: 450px; max-width: 600px; padding: 20px; background-color: #f0efeb; font-weight: bold;}
         .bottom {padding-top: 50px;}
@@ -30,54 +30,64 @@
                 <button class="add">ADD</button>
             </div>
             <div class="bottom">
-                <ul>
-                    <li>
-                        <p>테스트로 입력 this is test text!</p>
-                        <button class="done">DONE</button>
-                        <button class="remove">REMOVE</button>
-                    </li>
-                </ul>
+                <ul></ul>
             </div>
         </div>
     </div>
 
     <script>
-        var ul = document.getElementsByTagName('ul')[0];
-        var inputV = document.getElementsByTagName('input')[0].value;
-        var addBtn = document.getElementsByClassName('add')[0];
-        var doneBtn = document.getElementsByClassName('done');
+        var ul = document.querySelector('ul');
+        var input = document.querySelector('input');
+        var addBtn = document.querySelector('.add');
+        var completeBtn = document.querySelector('.complete');
+        var removeBtn = document.querySelector('.remove');
 
-        addBtn.addEventListener('click', function(event) {
+
+        addBtn.addEventListener('click', addList);
+        completeBtn.addEventListener('click', completeList); //얘네를찾을수가없는거임아직생성이안되었으니까
+        // removeBtn.addEventListener('click', removeList);
+
+
+        function addList() {
+            // 리스트li 추가
             var newLi = document.createElement('li');
+            ul.append(newLi);
+            // 텍스트 추가
             var newP = document.createElement('p');
-            var inputV = document.getElementsByTagName('input')[0].value; //이걸또안쪾에넣으니까되네뭐지???
-            newP.textContent = inputV;
-            var newDoneBtn = document.createElement('button');
-            newDoneBtn.className = 'done';
-            newDoneBtn.innerHTML = 'DONE'
+            newP.textContent = input.value;
+            newLi.appendChild(newP);
+            // 완료 버튼 생성
+            var newcompleteBtn = document.createElement('button');
+            newcompleteBtn.className = 'complete';
+            newcompleteBtn.innerHTML = 'COMPLETE'
+            newLi.appendChild(newcompleteBtn);
+            // 삭제 버튼 생성
             var newRemoveBtn = document.createElement('button');
             newRemoveBtn.className = 'remove';
             newRemoveBtn.innerHTML = 'REMOVE';
-            // classlit과 이거 차이점
-            newLi.appendChild(newP);
-            newLi.appendChild(newDoneBtn);
             newLi.appendChild(newRemoveBtn);
-            ul.append(newLi);
+            // classlit과 이거 차이점
 
-            //제거누르면사라지는거 완료누르면밑줄쳐지는거
             //50분걸림
 
             // 10:05~10:30 또 var안쪽에 넣으면 되니까 전역로컬 더 공부 30분걸림
-        });
-
-        for(i=0; i<doneBtn.length; i++) {
-            doneBtn[i].addEventListener('click', function(event) {
-                // var doneBtn = document.getElementsByClassName('done');
-                // doneBtn[i].parentNode.remove();
-                 alert(i);
-                 // 아니 이거 어케하지
-            });
+            input.value = '';
         };
+        
+        function completeList(event) {
+            var item = event.target;
+            if(item.className === 'complete') {
+                item.previousElementSibling.style.textDecoration = 'line-through';
+            }
+        };
+
+        // function removeList(event) {
+        //     var item = event.target;
+        //     if(item.className === 'remove') {
+        //         item.parentNode.remove();
+        //     }
+        // };
+        // 12:45~ 첫번째꺼만 지워진다
     </script>
 </body>
 </html>
