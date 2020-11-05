@@ -19,6 +19,7 @@
         p {display: inline-block; width: 450px; max-width: 600px; padding: 20px; background-color: #f0efeb; font-weight: bold;}
         .bottom {padding-top: 50px;}
         li {margin-bottom: 10px;}
+        .completed {background-color: rgba(0,0,0,0.1);}
 
     </style>
 </head>
@@ -37,6 +38,7 @@
 
     <script>
         var ul = document.querySelector('ul');
+        var bottom = document.querySelector('.bottom');
         var input = document.querySelector('input');
         var addBtn = document.querySelector('.add');
         var completeBtn = document.querySelector('.complete');
@@ -44,8 +46,7 @@
 
 
         addBtn.addEventListener('click', addList);
-        completeBtn.addEventListener('click', completeList); //얘네를찾을수가없는거임아직생성이안되었으니까
-        // removeBtn.addEventListener('click', removeList);
+        bottom.addEventListener('click', completeRemove);
 
 
         function addList() {
@@ -66,28 +67,19 @@
             newRemoveBtn.className = 'remove';
             newRemoveBtn.innerHTML = 'REMOVE';
             newLi.appendChild(newRemoveBtn);
-            // classlit과 이거 차이점
 
-            //50분걸림
-
-            // 10:05~10:30 또 var안쪽에 넣으면 되니까 전역로컬 더 공부 30분걸림
             input.value = '';
         };
         
-        function completeList(event) {
+        function completeRemove(event) {
             var item = event.target;
             if(item.className === 'complete') {
+                item.previousElementSibling.className += 'completed';
                 item.previousElementSibling.style.textDecoration = 'line-through';
+            } else if(item.className === 'remove') {
+                item.parentNode.remove();
             }
         };
-
-        // function removeList(event) {
-        //     var item = event.target;
-        //     if(item.className === 'remove') {
-        //         item.parentNode.remove();
-        //     }
-        // };
-        // 12:45~ 첫번째꺼만 지워진다
     </script>
 </body>
 </html>
