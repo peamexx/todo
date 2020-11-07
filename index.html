@@ -5,30 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        *{margin: 0; padding: 0; border: 0; list-style: none; font-family: 'Montserrat', sans-serif;}
+        *{margin: 0; padding: 0; border: 0; list-style: none; font-family: 'Roboto', 'Noto Sans KR', sans-serif; box-sizing: border-box;}
         html, body {width: 100%; height: 100%;}
-        .wrap {width: 100%; height: 100%; background-color: #fff1e6;}
-        .todo {width: 800px; position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);}
-        input {width: 600px; padding: 20px; background-color: #eddcd2; font-size: 16px;}
-        button {margin-left: 10px; padding: 20px; color: #fff; cursor: pointer;}
-        .add {margin-left: 10px; background-color: #ddbea9; font-weight: bold;}
-        .complete {background-color: #cb997e; font-weight: bold;}
-        .remove {background-color: #b7b7a4;}
-        p {display: inline-block; width: 450px; max-width: 600px; padding: 20px; background-color: #f0efeb; font-weight: bold;}
-        .bottom {padding-top: 50px;}
+        .wrap {width: 100%; height: 100%; background-color: #fff1e6; overflow: auto;}
+        .todo {width: 800px; margin: auto; padding-top: 150px; padding-bottom: 50px; font-size: 0;}
+        h1 {margin-bottom: 20px; text-align: center; font-size: 50px;}
+        input {width: 80%; padding: 20px; background-color: #eddcd2; font-size: 16px;}
+        button {padding: 16px; vertical-align: top; color: #fff; cursor: pointer;}
+        .bottom {margin-top: 50px; word-break: break-all;}
         li {margin-bottom: 10px;}
-        .completed {background-color: rgba(0,0,0,0.1);}
-
+        .addBtn {width: 18%; margin-left: 2%; background-color: #ddbea9;}
+        .completeBtn {width: 14%; margin: 0 1%; background-color: #cb997e; transition: ease all 0.5;}
+        .removeBtn {width: 14%; background-color: #b7b7a4;}
+        .material-icons {pointer-events: none;}
+        p {display: inline-block; width: 70%; padding: 20px; background-color: #f0efeb; font-size: 16px; font-weight: bold; transition: all 0.5s;}
+        .completed {background-color: rgba(0,0,0,0.1); text-decoration: line-through;}
+        @media screen and (max-width: 1000px) {
+            .todo {width: 90%; padding-top: 50px;}
+        }
     </style>
 </head>
 <body>
     <div class="wrap">
         <div class="todo">
+            <h1>TODO</h1>
             <div class="top">
                 <input type="text">
-                <button class="add">ADD</button>
+                <button class="addBtn"><span class="material-icons"> add </span></button>
+                <select name="">
+                    <option value="all">전체</option>
+                    <option value="completed">완료</option>
+                    <option value="unCompleted">미완료</option>
+                </select>
             </div>
             <div class="bottom">
                 <ul></ul>
@@ -40,46 +51,57 @@
         var ul = document.querySelector('ul');
         var bottom = document.querySelector('.bottom');
         var input = document.querySelector('input');
-        var addBtn = document.querySelector('.add');
-        var completeBtn = document.querySelector('.complete');
-        var removeBtn = document.querySelector('.remove');
+        var addBtn = document.querySelector('.addBtn');
+        var completeBtn = document.querySelector('.completeBtn');
+        var removeBtn = document.querySelector('.removeBtn');
+        var select = document.querySelector('select');
 
 
         addBtn.addEventListener('click', addList);
         bottom.addEventListener('click', completeRemove);
+        select.addEventListener('click', filter);
 
 
         function addList() {
-            // 리스트li 추가
-            var newLi = document.createElement('li');
-            ul.append(newLi);
-            // 텍스트 추가
-            var newP = document.createElement('p');
-            newP.textContent = input.value;
-            newLi.appendChild(newP);
-            // 완료 버튼 생성
-            var newcompleteBtn = document.createElement('button');
-            newcompleteBtn.className = 'complete';
-            newcompleteBtn.innerHTML = 'COMPLETE'
-            newLi.appendChild(newcompleteBtn);
-            // 삭제 버튼 생성
-            var newRemoveBtn = document.createElement('button');
-            newRemoveBtn.className = 'remove';
-            newRemoveBtn.innerHTML = 'REMOVE';
-            newLi.appendChild(newRemoveBtn);
+            if(input.value != '') {
+                // 리스트li 추가
+                var newLi = document.createElement('li');
+                ul.append(newLi);
+                // 텍스트 추가
+                var newP = document.createElement('p');
+                newP.textContent = input.value;
+                newLi.appendChild(newP);
+                // 완료 버튼 생성
+                var newcompleteBtn = document.createElement('button');
+                newcompleteBtn.classList.add('completeBtn');
+                newcompleteBtn.innerHTML = '<span class="material-icons"> check </span>';
+                newLi.appendChild(newcompleteBtn);
+                // 삭제 버튼 생성
+                var newRemoveBtn = document.createElement('button');
+                newRemoveBtn.classList.add('removeBtn');
+                newRemoveBtn.innerHTML = '<span class="material-icons"> remove </span>';
+                newLi.appendChild(newRemoveBtn);
 
-            input.value = '';
+                input.value = '';
+            } else {
+                alert('할일을 입력해주세요');
+            }
         };
         
-        function completeRemove(event) {
-            var item = event.target;
-            if(item.className === 'complete') {
-                item.previousElementSibling.className += 'completed';
-                item.previousElementSibling.style.textDecoration = 'line-through';
-            } else if(item.className === 'remove') {
+        function completeRemove(e) {
+            var item = e.target;
+            var p = item.previousElementSibling;
+
+            if(item.classList.contains('completeBtn')) {
+                p.classList.toggle('completed');
+            } else if(item.classList.contains('removeBtn')) {
                 item.parentNode.remove();
             }
         };
+
+        function filter(e) {
+
+        }
     </script>
 </body>
 </html>
