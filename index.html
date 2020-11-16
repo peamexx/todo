@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        *{margin: 0; padding: 0; border: 0; list-style: none; font-family: 'Roboto', 'Noto Sans KR', sans-serif; box-sizing: border-box;}
+        *{margin: 0; padding: 0; border: 0; list-style: none; font-family: 'Fira Mono', 'Noto Sans KR', sans-serif; box-sizing: border-box;}
         html, body {width: 100%; height: 100%;}
         .wrap {width: 100%; height: 100%; background-color: #fff1e6; overflow: auto;}
         .todo {width: 800px; margin: auto; padding-top: 150px; padding-bottom: 50px; font-size: 0;}
@@ -16,13 +17,17 @@
         input {width: 80%; padding: 20px; background-color: #eddcd2; font-size: 16px;}
         button {padding: 16px; vertical-align: top; color: #fff; cursor: pointer;}
         .bottom {margin-top: 50px; word-break: break-all;}
-        li {margin-bottom: 10px;}
+        li {position: relative; margin-bottom: 10px;}
         .addBtn {width: 18%; margin-left: 2%; background-color: #ddbea9;}
-        .completeBtn {width: 14%; margin: 0 1%; background-color: #cb997e; transition: ease all 0.5;}
-        .removeBtn {width: 14%; background-color: #b7b7a4;}
+        .modifyBtn {width: 9%; margin: 0 1%; background-color: #b7b7a4;}
+        .completeBtn {width: 9%; margin-left: 1%; background-color: #cb997e; transition: ease all 0.5;}
+        .removeBtn {width: 9%; background-color: #b7b7a4;}
         .material-icons {pointer-events: none;}
         p {display: inline-block; width: 70%; padding: 20px; background-color: #f0efeb; font-size: 16px; font-weight: bold; transition: all 0.5s;}
+        .inputModify {display: none; position: absolute; top: 0; left: 0;};
         .completed {background-color: rgba(0,0,0,0.1); text-decoration: line-through;}
+        .on {display: block !important; border: 2px solid #ef476f;}
+        .on:focus {border: 2px solid #ef476f !important;}
         @media screen and (max-width: 1000px) {
             .todo {width: 90%; padding-top: 50px;}
         }
@@ -35,7 +40,7 @@
             <div class="top">
                 <input type="text">
                 <button class="addBtn"><span class="material-icons"> add </span></button>
-                <select name="">
+                <select name="select">
                     <option value="all">전체</option>
                     <option value="completed">완료</option>
                     <option value="unCompleted">미완료</option>
@@ -50,33 +55,46 @@
     <script>
         var ul = document.querySelector('ul');
         var bottom = document.querySelector('.bottom');
+        var p = document.querySelector('p');
         var input = document.querySelector('input');
         var addBtn = document.querySelector('.addBtn');
+        var modifyBtn = document.querySelector('.modifyBtn');
         var completeBtn = document.querySelector('.completeBtn');
         var removeBtn = document.querySelector('.removeBtn');
+        var inputModify = document.querySelector('.inputModify');
         var select = document.querySelector('select');
 
 
         addBtn.addEventListener('click', addList);
-        bottom.addEventListener('click', completeRemove);
+        bottom.addEventListener('click', buttons);
         select.addEventListener('click', filter);
 
 
         function addList() {
             if(input.value != '') {
-                // 리스트li 추가
+                // 리스트 추가
                 var newLi = document.createElement('li');
                 ul.append(newLi);
-                // 텍스트 추가
+                // 할일 추가
                 var newP = document.createElement('p');
                 newP.textContent = input.value;
                 newLi.appendChild(newP);
-                // 완료 버튼 생성
+                // 수정용 input 추가
+                var newInput = document.createElement('input');
+                newInput.classList.add('inputModify');
+                newInput.value = input.value;
+                newLi.appendChild(newInput);
+                // 완료 버튼 추가
                 var newcompleteBtn = document.createElement('button');
                 newcompleteBtn.classList.add('completeBtn');
                 newcompleteBtn.innerHTML = '<span class="material-icons"> check </span>';
                 newLi.appendChild(newcompleteBtn);
-                // 삭제 버튼 생성
+                // 수정 버튼 추가
+                var newModifyBtn = document.createElement('button');
+                newModifyBtn.classList.add('modifyBtn');
+                newModifyBtn.innerHTML = '<span class="material-icons"> create </span>';
+                newLi.appendChild(newModifyBtn);
+                // 삭제 버튼 추가
                 var newRemoveBtn = document.createElement('button');
                 newRemoveBtn.classList.add('removeBtn');
                 newRemoveBtn.innerHTML = '<span class="material-icons"> remove </span>';
@@ -88,14 +106,23 @@
             }
         };
         
-        function completeRemove(e) {
+        function buttons(e) {
             var item = e.target;
-            var p = item.previousElementSibling;
+            var p = item.parentNode.querySelector('p');
+            var input = item.parentNode.querySelector('input');
 
             if(item.classList.contains('completeBtn')) {
                 p.classList.toggle('completed');
             } else if(item.classList.contains('removeBtn')) {
                 item.parentNode.remove();
+            } else if(item.classList.contains('modifing')) { //이부분이 뭔가 마음에 안든다....
+                p.innerHTML = input.value;
+                input.classList.remove('on');
+                item.classList.remove('modifing');
+            } else if(item.classList.contains('modifyBtn')) {
+                item.classList.toggle('modifing');
+                input.classList.toggle('on');
+                // p[0].innerHTML = inputModify.value; foreach를 배워야할떄가 왓는가?
             }
         };
 
